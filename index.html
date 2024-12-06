@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UP Token Distribution</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    canvas {
+      margin-top: 30px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time UP Token Distribution</h1>
+  <canvas id="pieChart" width="400" height="400"></canvas>
+
+  <script>
+    async function fetchTokenData() {
+      // Simulating API response, replace with actual Koinos blockchain or your backend
+      const data = {
+        liquidityPairs: 4500000, // Example liquidity pairs data
+        stakingWallet: 1500000, // Example staking wallet data
+        creatorWallet: 1000000, // Example creator wallet data
+        lockedWallet: 500000, // Example locked wallet data
+        holders: 2000000, // Example holder data
+      };
+      return data;
+    }
+
+    async function updatePieChart() {
+      const data = await fetchTokenData();
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Liquidity Pairs', 'Staking Wallet', 'Creator Wallet', 'Locked Wallet', 'Holders'],
+          datasets: [{
+            label: 'Token Supply Distribution',
+            data: [data.liquidityPairs, data.stakingWallet, data.creatorWallet, data.lockedWallet, data.holders],
+            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFFB'],
+            borderColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFFB'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.label + ': ' + tooltipItem.raw.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Update pie chart every 5 minutes (300000 milliseconds)
+    setInterval(updatePieChart, 300000); // Update every 5 minutes
+
+    // Initial load of the pie chart
+    updatePieChart();
+  </script>
+</body>
+</html>
